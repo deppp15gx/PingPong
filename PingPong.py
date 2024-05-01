@@ -1,4 +1,5 @@
 from pygame import *
+from time import sleep
 win_width = 700
 win_height = 500
 
@@ -70,12 +71,11 @@ while game:
             speed_x *= -1
         player1.update_l()
         if ball.rect.x < 0:
-            finish = True
             window.blit(player2_win, (200, 200))
-        if ball.rect.x > win_width:
             finish = True
+        if ball.rect.x > win_width:
             window.blit(player1_win, (200, 200))
-
+            finish = True
         player1.reset()
     
         player2.update_r()
@@ -85,4 +85,12 @@ while game:
         ball.reset()
 
     display.update()
+
+    if finish == True:
+        time.delay(3000)
+        finish = False
+        ball.rect.x = 312
+        ball.rect.y = 200
+
+
     clock.tick(FPS)
