@@ -4,11 +4,41 @@ win_height = 500
 
 window = display.set_mode((win_width, win_height))
 
+class GameSprite(sprite.Sprite):
+    def __init__(self, player_image, player_x, player_y, player_speed, size_x, size_y):
+        super().__init__()
+        self.image = transform.scale(image.load(player_image), (size_x, size_y))
+        self.speed = player_speed
+        self.rect = self.image.get_rect()
+        self.rect.x = player_x
+        self.rect.y = player_y
+    def reset(self):
+        window.blit(self.image, (self.rect.x, self.rect.y))
+
+class Player(GameSprite):
+    def update_l(self):
+        keys_press = key.get_pressed()
+        if keys_press[K_w] and self.rect.y > 5:
+            self.rect.y -= self.speed
+        if keys_press[K_s] and self.rect.y < win_height - 80:
+            self.rect.y += self.speed
+    def update_r(self):
+        keys_press = key.get_pressed()
+        if keys_press[K_UP] and self.rect.y > 5:
+            self.rect.y -= self.speed
+        if keys_press[K_DOWN] and self.rect.y < win_height - 80:
+            self.rect.y += self.speed
+
 display.set_caption('Пинг Понг')
 background = transform.scale(image.load('stadion.jpg'), (win_width, win_height))
 
 font.init()
 font1 = font.SysFont("Arial", 36)
+
+player1 = Player('rocket2.png', 25, 200, 5, 80, 100)
+player2 = Player('rocket1.png', 600, 200, 5, 80, 100)
+
+ball = GameSprite('ball.png', 312, 200, 7, 80, 100)
 
 FPS = 60
 game = True
@@ -26,11 +56,15 @@ while game:
 
         window.blit(background, (0, 0))
 
+        player1.update_l()
 
+        player1.reset()
     
+        player2.update_r()
 
+        player2.reset()
 
-
+        ball.reset()
 
     display.update()
     clock.tick(FPS)
