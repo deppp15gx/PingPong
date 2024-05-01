@@ -48,15 +48,33 @@ clock = time.Clock()
 player1_win = font1.render('Игрок 1 победил! ', 1, (0, 255, 47))
 player2_win = font1.render('Игрок 2 победил! ', 1, (255, 0, 0))
 
+speed_x = 3
+speed_y = 3
+
+
+
 while game:
     for e in event.get():
         if e.type == QUIT:
             game = False
     if finish != True:
-
+  
         window.blit(background, (0, 0))
 
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+
+        if ball.rect.y > win_height-50 or ball.rect.y < 0:
+            speed_y *= -1
+        if sprite.collide_rect(player1, ball) or sprite.collide_rect(player2, ball):
+            speed_x *= -1
         player1.update_l()
+        if ball.rect.x < 0:
+            finish = True
+            window.blit(player2_win, (200, 200))
+        if ball.rect.x > win_width:
+            finish = True
+            window.blit(player1_win, (200, 200))
 
         player1.reset()
     
